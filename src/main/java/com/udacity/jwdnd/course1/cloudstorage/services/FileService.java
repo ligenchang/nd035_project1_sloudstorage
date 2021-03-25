@@ -25,6 +25,10 @@ public class FileService {
         return fileMapper.getFile(fileId);
     }
 
+    public boolean isFileAvailable(String fileName) {
+        return fileMapper.GetFiles(fileName).size() == 0;
+    }
+
 
     public Integer addFile(File file){
 

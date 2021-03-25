@@ -45,7 +45,7 @@ public class CredentialService {
         for(int i=0; i < creds.size(); i++) {
             String encodedKey = creds.get(i).getKey();
             String decryptedPassword = encryptionService.decryptValue(creds.get(i).getPassword(), encodedKey);
-            creds.get(i).setPassword(decryptedPassword);
+            creds.get(i).setDecryptedPassword(decryptedPassword);
         }
         return creds;
     }

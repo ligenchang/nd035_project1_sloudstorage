@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -32,12 +33,31 @@ public class FileController {
     }
 
     @PostMapping("/upload")
+    @ExceptionHandler(MultipartException.class)
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes, Authentication authentication, Model model) throws IOException {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
+        if (fileName.equals("")){
+            model.addAttribute("resultError", "You must specify a file");
+            return "result";
+        }
+
         String contentType = file.getContentType();
+
+
         Long fileSize = file.getSize();
+
+//        if (fileSize > 10){
+//            model.addAttribute("resultError", "The file is too large to upload");
+//            return "result";
+//        }
+
+        if (!this.fileService.isFileAvailable(fileName)){
+            model.addAttribute("resultError", "File Name already exist, please upload file with different name.");
+            return "result";
+        }
+
         byte[] fileData = file.getBytes();
 
         File myfile = new File();

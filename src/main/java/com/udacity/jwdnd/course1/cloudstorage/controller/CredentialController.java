@@ -41,7 +41,7 @@ public class CredentialController {
         byte[] key = new byte[16];
         random.nextBytes(key);
         String encodedKey = Base64.getEncoder().encodeToString(key);
-        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
+        String encryptedPassword = encryptionService.encryptValue(credential.getDecryptedPassword(), encodedKey);
         credential.setPassword(encryptedPassword);
         credential.setKey(encodedKey);
 
@@ -53,9 +53,6 @@ public class CredentialController {
 
     @GetMapping("/delete/{id}")
     public String deleteCredential(@PathVariable("id") Integer id, Model model, Authentication authentication){
-
-
-
 
         credentialService.deleteCredential(id);
         model.addAttribute("credentials", this.credentialService.getCredentials(authentication.getName()));

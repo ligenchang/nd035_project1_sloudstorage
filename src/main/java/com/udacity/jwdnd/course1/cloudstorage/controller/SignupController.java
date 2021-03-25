@@ -37,10 +37,6 @@ public class SignupController {
     @PostMapping()
     public String signupUser(@ModelAttribute User user, Model model) {
         String signupError = null;
-//        user.setSalt("123456");
-
-//        String hashedPwd = hashService.getHashedValue(user.getPassword(), user.getSalt());
-//        user.setPassword(hashedPwd);
 
         if (!userService.isUsernameAvailable(user.getUserName())) {
             signupError = "The username already exists.";
@@ -55,10 +51,12 @@ public class SignupController {
 
         if (signupError == null) {
             model.addAttribute("signupSuccess", true);
+            return "login";
         } else {
             model.addAttribute("signupError", signupError);
+            return "signup";
         }
 
-        return "signup";
+
     }
 }
